@@ -1,5 +1,5 @@
 ###########################################
-# The purpose of this script is to get continuous traffic data from Iowa DOT
+# The purpose of this script is to get traffic data from Iowa DOT API
 # Data is updated every five minutes
 # Author: Eric Becerril-Blas
 ###########################################
@@ -13,6 +13,7 @@ from requests.exceptions import HTTPError
 import pandas as pd
 import json
 import csv
+import ijson
 
 ###########################################
 # Get the JSON response from the query url and create a JSON file from the response called iowa_output.json
@@ -27,22 +28,22 @@ else:
     #status code is 404 or something else.
     print('An error has occurred. Status code is ',response.status_code)
 
-print(response.headers) #TEST
-
-print(response.headers['Content-Type']) #TEST
-
+response.encoding = 'utf-8'
+print(response.text)
+print(response.headers)
 # outputting the JSON file
 JSON_output = open('iowa_output.json','w')
 JSON_output.write(response.text)
 JSON_output.close()
-#TESTS
-#print(response.content)
-#print(response.text)
-#print(response.json())
+
 
 ###########################################
 # Converting JSON to CSV in the following code... Not quite working yet
 ###########################################
+json_response = response.json()
+
+
+'''
 #json_response = response.json()
 
 JSONtraffic_data = response.json()
@@ -55,4 +56,54 @@ traffic_data = open('traffic.csv', 'w')
 
 csvwriter = csv.writer(traffic_data)
 
-df=pd.read_json("iowa_output.json")
+#csvwriter.writerow(data[0].keys())  # header row
+print(response.request.body)
+'''
+#another way?
+filename = "iowa_output.json"
+with open(filename, 'r') as f:
+    objects = ijson.items(f, 'meta.view.columns.item')
+    columns = list(objects)
+print(columns[0])
+
+good_columns = [
+ "OBJECTID",
+ "STATUS",
+ "OCCUPANCY",
+ "UNIQUE_ID",
+ "SITE_NUMBER",
+ "RPUID",
+ "SENSOR_NAME",
+ "TOWNSHIP",
+ "SECTION",
+ "RANGE",
+ "RPUID_NAME",
+ "NWS_ID",
+ "LATITUDE",
+ "LONGITUDE",
+ "GPS_ALTITUDE",
+ "COUNTY_NAME",
+ "ROUTE_NAME",
+ "MILE_POST",
+ "COST_CENTER",
+ "GARAGE_NAME",
+ "DISTRICT_NO",
+ "COUNTY_NO",
+ "DATA_LAST_UPDATED",
+ "REST_EDITED",
+ "NORMAL_VOLUME",
+ "LONG_VOLUME",
+ "AVG_SPEED",
+ "AVG_HEADWAY",
+ "LANE_ID",
+ "UTC_OFFSET"
+]
+data = []
+with open(filename, 'r') as f:
+    objects = ijson.items(f, 'data.item')
+    for row in objects:
+        selected_row = []
+        for item in good_columns:
+            selected_row.append(row[column_names.index(item)])
+            data.append(selected_row)
+print(data[0])
