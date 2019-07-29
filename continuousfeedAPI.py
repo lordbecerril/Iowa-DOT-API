@@ -5,7 +5,7 @@
 ###########################################
 
 # This library is used for API requests
-# Do `pip install requests` to use requests
+# Do `pip install requests` to use requests library
 import requests
 from requests.exceptions import HTTPError
 
@@ -17,6 +17,7 @@ import ijson
 
 ###########################################
 # Get the JSON response from the query url and create a JSON file from the response called iowa_output.json
+# This part works fine
 ###########################################
 response = requests.get('https://services.arcgis.com/8lRhdTsQyJpO52F1/arcgis/rest/services/RWIS_Traffic_Data_View/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
 
@@ -28,10 +29,13 @@ else:
     #status code is 404 or something else.
     print('An error has occurred. Status code is ',response.status_code)
 
-response.encoding = 'utf-8'
-print(response.text)
-print(response.headers)
-# outputting the JSON file
+#The response headers can give you useful information, such as the content type of the response payload and a time limit on how long to cache the response. To view these headers, access .headers
+print(response.headers) #TEST
+
+# The following just shows the content type
+print(response.headers['Content-Type']) #TEST
+
+# outputting and wrting  the JSON file
 JSON_output = open('iowa_output.json','w')
 JSON_output.write(response.text)
 JSON_output.close()
@@ -40,10 +44,12 @@ JSON_output.close()
 ###########################################
 # Converting JSON to CSV in the following code... Not quite working yet
 ###########################################
-json_response = response.json()
+json_response = response.json() #Converting response to a dictionary with Keys
 
+print(json_response['attributes'][0])
 
 '''
+## COMMENTED THE WHOLE CHUNK OUT BELOW BECAUSE THIS WAS STUFF I TRIED IN THE PAST THAT CAME CLOSE TO WORKING
 #json_response = response.json()
 
 JSONtraffic_data = response.json()
@@ -58,7 +64,7 @@ csvwriter = csv.writer(traffic_data)
 
 #csvwriter.writerow(data[0].keys())  # header row
 print(response.request.body)
-'''
+
 #another way?
 filename = "iowa_output.json"
 with open(filename, 'r') as f:
@@ -107,3 +113,4 @@ with open(filename, 'r') as f:
             selected_row.append(row[column_names.index(item)])
             data.append(selected_row)
 print(data[0])
+'''
