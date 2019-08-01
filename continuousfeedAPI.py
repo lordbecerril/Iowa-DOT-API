@@ -40,77 +40,26 @@ JSON_output = open('iowa_output.json','w')
 JSON_output.write(response.text)
 JSON_output.close()
 
-
 ###########################################
 # Converting JSON to CSV in the following code... Not quite working yet
 ###########################################
 json_response = response.json() #Converting response to a dictionary with Keys
 
-print(json_response['attributes'][0])
+#Another way to write the json as a dict
+with open('iowa_output.json') as json_data:
+    data = json.load(json_data)
 
-'''
-## COMMENTED THE WHOLE CHUNK OUT BELOW BECAUSE THIS WAS STUFF I TRIED IN THE PAST THAT CAME CLOSE TO WORKING
-#json_response = response.json()
+# using the from_dict load function. Note that the 'orient' parameter
+# is not using the default value (or it will give the error "ValueError: arrays must all be the same length")
+# We transpose the resulting df and set index column as its index to get this result
+#pd.DataFrame.from_dict(data, orient='index').T.set_index('index')
+df = pd.DataFrame.from_dict(json_response, columns = ['features'],orient='index')# I added the "orient ='index' " because without it I get
+print(df,"\n")
 
-JSONtraffic_data = response.json()
+# Transpose the dataframe
+df_transposed = df.T
+print("Transposed dataframe:")
+print(df_transposed)
 
-json_response = json.dumps(JSONtraffic_data)
-
-traffic_data_parsed = json.loads(json_response)
-
-traffic_data = open('traffic.csv', 'w')
-
-csvwriter = csv.writer(traffic_data)
-
-#csvwriter.writerow(data[0].keys())  # header row
-print(response.request.body)
-
-#another way?
-filename = "iowa_output.json"
-with open(filename, 'r') as f:
-    objects = ijson.items(f, 'meta.view.columns.item')
-    columns = list(objects)
-print(columns[0])
-
-good_columns = [
- "OBJECTID",
- "STATUS",
- "OCCUPANCY",
- "UNIQUE_ID",
- "SITE_NUMBER",
- "RPUID",
- "SENSOR_NAME",
- "TOWNSHIP",
- "SECTION",
- "RANGE",
- "RPUID_NAME",
- "NWS_ID",
- "LATITUDE",
- "LONGITUDE",
- "GPS_ALTITUDE",
- "COUNTY_NAME",
- "ROUTE_NAME",
- "MILE_POST",
- "COST_CENTER",
- "GARAGE_NAME",
- "DISTRICT_NO",
- "COUNTY_NO",
- "DATA_LAST_UPDATED",
- "REST_EDITED",
- "NORMAL_VOLUME",
- "LONG_VOLUME",
- "AVG_SPEED",
- "AVG_HEADWAY",
- "LANE_ID",
- "UTC_OFFSET"
-]
-data = []
-with open(filename, 'r') as f:
-    objects = ijson.items(f, 'data.item')
-    for row in objects:
-        selected_row = []
-        for item in good_columns:
-            selected_row.append(row[column_names.index(item)])
-            data.append(selected_row)
-print(data[0])
-'''
+# Export dataframe to CSV file
+df_transposed.to_csv("traffic.csv")
