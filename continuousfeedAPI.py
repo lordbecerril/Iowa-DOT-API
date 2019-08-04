@@ -98,10 +98,10 @@ data = pd.read_csv("traffic.csv")
 
 #df_occupancy = data[['OBJECTID','Sensor Status (1=Active 0=Inactive)','Occupancy','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number','Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)', 'Normal Volume', 'Long Volume', 'Average Speed (MPH)','Average Headway','Lane ID', 'UTC Offset']]
 df_occupancy = data[['Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)','OBJECTID','Sensor Status (1=Active 0=Inactive)','Occupancy','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number','Average Headway','Lane ID', 'UTC Offset']]
-df_occupancy.to_csv("IowaOccupancy.csv",index = False)
+df_occupancy.to_csv("IowaOccupancy.csv",index = False, header = False)
 
 df_speed = data[['Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)','OBJECTID','Sensor Status (1=Active 0=Inactive)','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number', 'Average Speed (MPH)','Average Headway','Lane ID', 'UTC Offset']]
-df_speed.to_csv("IowaSpeed.csv",index = False)
+df_speed.to_csv("IowaSpeed.csv",index = False, header = False)
 
 df_volume = data[['Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)','OBJECTID','Sensor Status (1=Active 0=Inactive)','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number', 'Normal Volume', 'Long Volume', 'Average Headway','Lane ID', 'UTC Offset']]
-df_volume.to_csv("IowaVolume.csv",index = False)
+df_volume.to_csv("IowaVolume.csv",index = False, header = False)
