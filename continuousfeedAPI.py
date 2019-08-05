@@ -32,11 +32,6 @@ else:
     #status code is 404 or something else.
     print('An error has occurred. Status code is ',response.status_code)
 
-# outputting and wrting  the JSON file
-JSON_output = open('iowa_output.json','w')
-JSON_output.write(response.text)
-JSON_output.close()
-
 ###########################################
 # Converting JSON to CSV in the following code
 ###########################################
@@ -77,6 +72,7 @@ for item in range(len(json_response["features"])):
     entry.append(json_response['features'][item]['attributes']['GARAGE_NAME'])
     entry.append(json_response['features'][item]['attributes']['DISTRICT_NO'])
     entry.append(json_response['features'][item]['attributes']['COUNTY_NO'])
+    utc_stamp = str(json_response['features'][item]['attributes']['DATA_LAST_UPDATED'])
     utc_timestamp = json_response['features'][item]['attributes']['DATA_LAST_UPDATED']
     utc_timestamp = datetime.datetime.utcnow()
     entry.append(utc_timestamp.isoformat("T") + "Z")
@@ -88,7 +84,7 @@ for item in range(len(json_response["features"])):
     entry.append(json_response['features'][item]['attributes']['AVG_SPEED'])
     entry.append(json_response['features'][item]['attributes']['AVG_HEADWAY'])
     entry.append(json_response['features'][item]['attributes']['LANE_ID'])
-    entry.append(json_response['features'][item]['attributes']['LANE_ID'])
+    entry.append(json_response['features'][item]['attributes']['UTC_OFFSET'])
     data.append(entry)
 
 df = pd.DataFrame(data, columns = goodColumns)
@@ -96,12 +92,15 @@ df.to_csv("traffic.csv",index = False)
 
 data = pd.read_csv("traffic.csv")
 
+i_occ = "IowaOccupancy"+utc_stamp+".csv"
+i_spee = "IowaSpeed"+utc_stamp+".csv"
+i_vol = "IowaVolume"+utc_stamp+".csv"
 #df_occupancy = data[['OBJECTID','Sensor Status (1=Active 0=Inactive)','Occupancy','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number','Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)', 'Normal Volume', 'Long Volume', 'Average Speed (MPH)','Average Headway','Lane ID', 'UTC Offset']]
 df_occupancy = data[['Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)','OBJECTID','Sensor Status (1=Active 0=Inactive)','Occupancy','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number','Average Headway','Lane ID', 'UTC Offset']]
-df_occupancy.to_csv("IowaOccupancy.csv",index = False, header = False)
+df_occupancy.to_csv(i_occ,index = False)
 
 df_speed = data[['Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)','OBJECTID','Sensor Status (1=Active 0=Inactive)','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number', 'Average Speed (MPH)','Average Headway','Lane ID', 'UTC Offset']]
-df_speed.to_csv("IowaSpeed.csv",index = False, header = False)
+df_speed.to_csv(i_spee,index = False)
 
 df_volume = data[['Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)','OBJECTID','Sensor Status (1=Active 0=Inactive)','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number', 'Normal Volume', 'Long Volume', 'Average Headway','Lane ID', 'UTC Offset']]
-df_volume.to_csv("IowaVolume.csv",index = False, header = False)
+df_volume.to_csv(i_vol,index = False)
