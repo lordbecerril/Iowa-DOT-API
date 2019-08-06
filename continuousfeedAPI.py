@@ -74,11 +74,12 @@ for item in range(len(json_response["features"])):
     entry.append(json_response['features'][item]['attributes']['COUNTY_NO'])
     utc_stamp = str(json_response['features'][item]['attributes']['DATA_LAST_UPDATED'])
     utc_timestamp = json_response['features'][item]['attributes']['DATA_LAST_UPDATED']
-    utc_timestamp = datetime.datetime.utcnow()
-    entry.append(utc_timestamp.isoformat("T") + "Z")
+    #utc_timestamp = datetime.datetime.utcnow()
+    #entry.append(utc_timestamp.isoformat("T") + "Z")
+    entry.append(utc_timestamp)
     utc_timestamp = json_response['features'][item]['attributes']['REST_EDITED']
-    utc_timestamp = datetime.datetime.utcnow()
-    entry.append(utc_timestamp.isoformat("T") + "Z")
+    #utc_timestamp = datetime.datetime.utcnow()
+    entry.append(utc_timestamp)
     entry.append(json_response['features'][item]['attributes']['NORMAL_VOLUME'])
     entry.append(json_response['features'][item]['attributes']['LONG_VOLUME'])
     entry.append(json_response['features'][item]['attributes']['AVG_SPEED'])
@@ -96,11 +97,13 @@ i_occ = "IowaOccupancy"+utc_stamp+".csv"
 i_spee = "IowaSpeed"+utc_stamp+".csv"
 i_vol = "IowaVolume"+utc_stamp+".csv"
 #df_occupancy = data[['OBJECTID','Sensor Status (1=Active 0=Inactive)','Occupancy','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number','Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)', 'Normal Volume', 'Long Volume', 'Average Speed (MPH)','Average Headway','Lane ID', 'UTC Offset']]
-df_occupancy = data[['Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)','OBJECTID','Sensor Status (1=Active 0=Inactive)','Occupancy','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number','Average Headway','Lane ID', 'UTC Offset']]
+df_occupancy = data[['OBJECTID','Sensor Status (1=Active 0=Inactive)','Occupancy','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number','Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)', 'Average Headway','Lane ID', 'UTC Offset']]
 df_occupancy.to_csv(i_occ,index = False)
 
-df_speed = data[['Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)','OBJECTID','Sensor Status (1=Active 0=Inactive)','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number', 'Average Speed (MPH)','Average Headway','Lane ID', 'UTC Offset']]
+df_speed = data[['OBJECTID','Sensor Status (1=Active 0=Inactive)','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number','Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)', 'Average Speed (MPH)','Average Headway','Lane ID', 'UTC Offset']]
 df_speed.to_csv(i_spee,index = False)
 
-df_volume = data[['Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)','OBJECTID','Sensor Status (1=Active 0=Inactive)','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number', 'Normal Volume', 'Long Volume', 'Average Headway','Lane ID', 'UTC Offset']]
+df_volume = data[['OBJECTID','Sensor Status (1=Active 0=Inactive)','Unique ID','RWIS Site Number','RWIS RPU ID','Sensor Name','PLSS Township','PLSS Section','PLSS Range','RWIS Name','NWS ID','Latitude','Longitude','Altitude','County Name','Route Name','Mile Post','Cost Center','Garage Name','DOT District','County Number','Data Last Pulled from RWIS Sensor (UTC)', 'REST Service Last Updated (UTC)', 'Normal Volume', 'Long Volume','Average Headway','Lane ID', 'UTC Offset']]
 df_volume.to_csv(i_vol,index = False)
+
+# Do post request to Nicholas' API
