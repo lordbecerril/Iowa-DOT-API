@@ -22,7 +22,12 @@ import datetime
 # Get the JSON response from the query url and create a JSON file from the response called iowa_output.json
 # This part works fine
 ###########################################
+# statewide data below
 response = requests.get('https://services.arcgis.com/8lRhdTsQyJpO52F1/arcgis/rest/services/RWIS_Traffic_Data_View/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
+# Manchester https://services.arcgis.com/8lRhdTsQyJpO52F1/arcgis/rest/services/RWIS_Traffic_Data_View/FeatureServer/0/query?where=RPUID_NAME=%20%27Manchester%27&outFields=*&outSR=4326&f=json
+#response = requests.get('https://services.arcgis.com/8lRhdTsQyJpO52F1/arcgis/rest/services/RWIS_Traffic_Data_View/FeatureServer/0/query?where=RPUID_NAME=%20%27Manchester%27&outFields=*&outSR=4326&f=json')
+#Dubuque https://services.arcgis.com/8lRhdTsQyJpO52F1/arcgis/rest/services/RWIS_Traffic_Data_View/FeatureServer/0/query?where=GARAGE_NAME=%20%27Dubuque%27&outFields=*&outSR=4326&f=json
+#response = requests.get('https://services.arcgis.com/8lRhdTsQyJpO52F1/arcgis/rest/services/RWIS_Traffic_Data_View/FeatureServer/0/query?where=GARAGE_NAME=%20%27Dubuque%27&outFields=*&outSR=4326&f=json')
 
 # Print the status code
 if response:
@@ -36,11 +41,6 @@ else:
 # Converting JSON to CSV in the following code
 ###########################################
 json_response = response.json() #Converting response to a dict with keys
-
-#Another way to write the json as a dict
-with open('iowa_output.json') as json_data:
-    data = json.load(json_data)
-
 
 goodColumns =[]
 
